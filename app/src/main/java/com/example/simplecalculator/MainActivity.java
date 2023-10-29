@@ -83,8 +83,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Button button = (Button) v;
                 operator = button.getText().toString();
-                operand1 = Double.parseDouble(operand1View.getText().toString());
+                String operand1Text = operand1View.getText().toString();
+                try{
+                operand1 = Double.parseDouble(operand1Text);
                 operatorView.setText(operator);
+                }catch (NumberFormatException e) {
+                    operand1View.setText("");
+                    operatorView.setText("");
+                    operand2View.setText("");
+                    isNewCalculation = true;
+                }
             }
         };
 
@@ -97,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         btnEqual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNewCalculation) {
+                if (!isNewCalculation && !operatorView.getText().toString().equals("") && !operand2View.getText().toString().equals("")) {
                     operand2 = Double.parseDouble(operand2View.getText().toString());
                     double resultValue = calculateResult(operand1View, operand2View, result);
                     result.setText(String.valueOf(resultValue));
